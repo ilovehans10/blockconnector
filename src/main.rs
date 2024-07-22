@@ -7,13 +7,13 @@ const WIDTH: u8 = 8;
 
 #[derive(Clone, Copy)]
 enum TileTypes {
-    Block(Color),
+    Block(BlockColor),
     _Firework(Direction),
     _DiscoBall,
 }
 
 #[derive(Clone, Copy)]
-enum Color {
+enum BlockColor {
     Red,
     Green,
     Blue,
@@ -28,7 +28,7 @@ enum Direction {
 
 impl TileTypes {
     const fn new() -> Self {
-        Self::Block(Color::Blue)
+        Self::Block(BlockColor::Blue)
     }
 }
 
@@ -38,29 +38,29 @@ impl Display for TileTypes {
             Self::_DiscoBall => write!(f, "*"),
             Self::_Firework(_direction) => todo!(),
             Self::Block(color) => match color {
-                Color::Red => write!(f, "R"),
-                Color::Blue => write!(f, "B"),
-                Color::Green => write!(f, "G"),
-                Color::Yellow => write!(f, "Y"),
+                BlockColor::Red => write!(f, "R"),
+                BlockColor::Blue => write!(f, "B"),
+                BlockColor::Green => write!(f, "G"),
+                BlockColor::Yellow => write!(f, "Y"),
             },
         }
     }
 }
 
-impl Distribution<Color> for Standard {
-    fn sample<R: rand::Rng + ?Sized>(&self, rng: &mut R) -> Color {
+impl Distribution<BlockColor> for Standard {
+    fn sample<R: rand::Rng + ?Sized>(&self, rng: &mut R) -> BlockColor {
         match rng.gen_range(0..=3) {
-            0 => Color::Red,
-            1 => Color::Green,
-            2 => Color::Blue,
-            _ => Color::Yellow,
+            0 => BlockColor::Red,
+            1 => BlockColor::Green,
+            2 => BlockColor::Blue,
+            _ => BlockColor::Yellow,
         }
     }
 }
 
 fn main() {
     let mut game_board = vec![TileTypes::new(); (HEIGHT * WIDTH).into()];
-    game_board.fill_with(|| TileTypes::Block(rand::random::<Color>()));
+    game_board.fill_with(|| TileTypes::Block(rand::random::<BlockColor>()));
     println!("╔{}╗", "═".repeat(WIDTH.into()));
     for current_row in game_board.chunks(WIDTH.into()) {
         print!("║");

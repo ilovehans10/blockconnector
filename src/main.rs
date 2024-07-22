@@ -57,7 +57,7 @@ impl Distribution<Color> for Standard {
 
 fn main() {
     let mut game_board = vec![TileTypes::new(); (HEIGHT * WIDTH).into()];
-    game_board = game_board.into_iter().map(|_| TileTypes::Block(rand::random())).collect();
+    game_board.fill_with(|| TileTypes::Block(rand::random::<Color>()));
     println!("╔{}╗", "═".repeat(WIDTH.into()));
     for current_row in game_board.chunks(WIDTH.into()) {
         print!("║");

@@ -39,10 +39,10 @@ impl Display for TileTypes {
             Self::_DiscoBall => write!(f, "*"),
             Self::_Firework(_direction) => todo!(),
             Self::Block(color) => match color {
-                BlockColor::Red => write!(f, "{}R", color::Bg(color::Red)),
-                BlockColor::Blue => write!(f, "{}B", color::Bg(color::Blue)),
-                BlockColor::Green => write!(f, "{}G", color::Bg(color::Green)),
-                BlockColor::Yellow => write!(f, "{}Y", color::Bg(color::Yellow)),
+                BlockColor::Red => write!(f, "{}[]", color::Bg(color::Red)),
+                BlockColor::Blue => write!(f, "{}[]", color::Bg(color::Blue)),
+                BlockColor::Green => write!(f, "{}[]", color::Bg(color::Green)),
+                BlockColor::Yellow => write!(f, "{}[]", color::Bg(color::Yellow)),
             },
         }
     }
@@ -62,7 +62,7 @@ impl Distribution<BlockColor> for Standard {
 fn main() {
     let mut game_board = vec![TileTypes::new(); (HEIGHT * WIDTH).into()];
     game_board.fill_with(|| TileTypes::Block(rand::random::<BlockColor>()));
-    println!("╔{}╗", "═".repeat(WIDTH.into()));
+    println!("╔{}╗", "═".repeat((WIDTH * 2).into()));
     for current_row in game_board.chunks(WIDTH.into()) {
         print!("║");
         for current_element in current_row {
@@ -70,5 +70,5 @@ fn main() {
         }
         println!("{}║", color::Bg(color::Reset));
     }
-    println!("╚{}╝", "═".repeat(WIDTH.into()));
+    println!("╚{}╝", "═".repeat((WIDTH * 2).into()));
 }

@@ -21,7 +21,10 @@ enum Color {
 }
 
 #[derive(Clone, Copy)]
-struct Direction {}
+enum Direction {
+    _Vertical,
+    _Horizontal,
+}
 
 impl TileTypes {
     const fn new() -> Self {

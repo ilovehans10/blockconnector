@@ -3,8 +3,8 @@ use std::fmt::Display;
 use rand::{distributions::Standard, prelude::Distribution};
 use termion::color;
 
-const HEIGHT: u8 = 8;
-const WIDTH: u8 = 8;
+const HEIGHT: u16 = 8;
+const WIDTH: u16 = 16;
 
 #[derive(Clone, Copy)]
 enum TileTypes {

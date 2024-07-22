@@ -1,6 +1,7 @@
 use std::fmt::Display;
 
 use rand::{distributions::Standard, prelude::Distribution};
+use termion::color;
 
 const HEIGHT: u8 = 8;
 const WIDTH: u8 = 8;
@@ -38,10 +39,10 @@ impl Display for TileTypes {
             Self::_DiscoBall => write!(f, "*"),
             Self::_Firework(_direction) => todo!(),
             Self::Block(color) => match color {
-                BlockColor::Red => write!(f, "R"),
-                BlockColor::Blue => write!(f, "B"),
-                BlockColor::Green => write!(f, "G"),
-                BlockColor::Yellow => write!(f, "Y"),
+                BlockColor::Red => write!(f, "{}R", color::Bg(color::Red)),
+                BlockColor::Blue => write!(f, "{}B", color::Bg(color::Blue)),
+                BlockColor::Green => write!(f, "{}G", color::Bg(color::Green)),
+                BlockColor::Yellow => write!(f, "{}Y", color::Bg(color::Yellow)),
             },
         }
     }
@@ -67,7 +68,7 @@ fn main() {
         for current_element in current_row {
             print!("{current_element}");
         }
-        println!("║");
+        println!("{}║", color::Bg(color::Reset));
     }
     println!("╚{}╝", "═".repeat(WIDTH.into()));
 }

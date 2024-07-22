@@ -5,6 +5,7 @@ edition = "2021"
 
 [dependencies]
 rand = "0.8.5"
+termion = "4.0.2"
 
 [lints.rust]
 unsafe_code = "forbid"

@@ -16,8 +16,8 @@ pub struct GameData {
 }
 
 impl Cordinate {
-    pub const fn new(x:u16, y:u16) -> Self {
-        Self{x,y}
+    pub const fn new(x: u16, y: u16) -> Self {
+        Self { x, y }
     }
 }
 
@@ -33,7 +33,7 @@ impl GameData {
             width,
         }
     }
-    const fn in_bounds (&self, location: Cordinate) -> bool {
+    const fn in_bounds(&self, location: Cordinate) -> bool {
         location.x < self.width && location.y < self.height
     }
 

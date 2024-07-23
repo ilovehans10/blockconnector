@@ -1,6 +1,4 @@
-use game_board::Cordinate;
-
-use crate::game_board::GameData;
+use game_board::{Cordinate, GameData};
 mod game_board;
 mod tiles;
 

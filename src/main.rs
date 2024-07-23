@@ -6,7 +6,7 @@ const HEIGHT: u16 = 8;
 const WIDTH: u16 = 16;
 
 fn main() {
-    let mut game = GameData::new(HEIGHT, WIDTH);
+    let game = GameData::new(HEIGHT, WIDTH);
     game.draw_board();
     game.draw_board();
 }

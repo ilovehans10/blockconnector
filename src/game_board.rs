@@ -3,9 +3,9 @@ use termion::color;
 
 pub struct GameData {
     game_board: Vec<TileTypes>,
-    turn_number: u8,
-    max_turns: u8,
-    height: u16,
+    _turn_number: u8,
+    _max_turns: u8,
+    _height: u16,
     width: u16,
 }
 
@@ -15,9 +15,9 @@ impl GameData {
         prototype_board.fill_with(|| TileTypes::Block(rand::random::<BlockColor>()));
         Self {
             game_board: prototype_board,
-            turn_number: 0,
-            max_turns: 0,
-            height,
+            _turn_number: 0,
+            _max_turns: 0,
+            _height: height,
             width,
         }
     }

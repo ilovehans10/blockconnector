@@ -21,6 +21,10 @@ impl GameData {
             width,
         }
     }
+    pub fn draw_raw(&self) {
+        self.game_board.iter().for_each(|x| print!("{x}"));
+        println!("{}", color::Bg(color::Reset));
+    }
     pub fn draw_board(&self) {
         println!("╔{}╗", "═".repeat((self.width * 2).into()));
         for current_row in self.game_board.chunks(self.width.into()) {

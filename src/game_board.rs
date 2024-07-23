@@ -1,12 +1,24 @@
 use crate::tiles::{BlockColor, TileTypes};
 use termion::color;
 
+#[derive(Debug, Clone, Copy)]
+pub struct Cordinate {
+    x: u16,
+    y: u16,
+}
+
 pub struct GameData {
     game_board: Vec<TileTypes>,
     _turn_number: u8,
     _max_turns: u8,
-    _height: u16,
+    height: u16,
     width: u16,
+}
+
+impl Cordinate {
+    pub const fn new(x:u16, y:u16) -> Self {
+        Self{x,y}
+    }
 }
 
 impl GameData {
@@ -17,8 +29,19 @@ impl GameData {
             game_board: prototype_board,
             _turn_number: 0,
             _max_turns: 0,
-            _height: height,
+            height,
             width,
+        }
+    }
+    const fn in_bounds (&self, location: Cordinate) -> bool {
+        location.x < self.width && location.y < self.height
+    }
+
+    pub fn get_cell(&self, location: Cordinate) -> Option<TileTypes> {
+        if self.in_bounds(location) {
+            Some(self.game_board[usize::from(location.x + (location.y * self.width))])
+        } else {
+            None
         }
     }
     pub fn draw_raw(&self) {

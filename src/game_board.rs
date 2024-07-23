@@ -27,7 +27,7 @@ impl GameData {
     }
     pub fn draw_board(&self) {
         println!("╔{}╗", "═".repeat((self.width * 2).into()));
-        for current_row in self.game_board.chunks(self.width.into()) {
+        for current_row in self.game_board.chunks(self.width.into()).rev() {
             print!("║");
             for current_element in current_row {
                 print!("{current_element}");

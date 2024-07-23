@@ -45,8 +45,8 @@ impl GameData {
         }
     }
     pub fn draw_raw(&self) {
-        self.game_board.iter().for_each(|x| print!("{x}"));
-        println!("{}", color::Bg(color::Reset));
+        self.game_board.iter().for_each(|x| print!("{x:?}"));
+        println!();
     }
     pub fn draw_board(&self) {
         println!("╔{}╗", "═".repeat((self.width * 2).into()));

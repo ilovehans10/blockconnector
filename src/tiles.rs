@@ -1,5 +1,5 @@
 use rand::{distributions::Standard, prelude::Distribution};
-use std::fmt::Display;
+use std::fmt::{Debug, Display};
 use termion::color;
 
 #[derive(Clone, Copy)]
@@ -42,6 +42,23 @@ impl Display for TileTypes {
             },
         }
     }
+}
+
+impl Debug for TileTypes {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Self::_DiscoBall => write!(f, "*"),
+            Self::_Firework(_direction) => todo!(),
+            Self::Block(color) => match color {
+                BlockColor::Red => write!(f,    "{}[]{}", color::Bg(color::Red), color::Bg(color::Reset)),
+                BlockColor::Blue => write!(f,   "{}[]{}", color::Bg(color::Blue), color::Bg(color::Reset)),
+                BlockColor::Green => write!(f , "{}[]{}", color::Bg(color::Green), color::Bg(color::Reset)),
+                BlockColor::Yellow => write!(f, "{}[]{}", color::Bg(color::Yellow), color::Bg(color::Reset)),
+            },
+        }
+
+    }
+
 }
 
 impl Distribution<BlockColor> for Standard {

@@ -12,8 +12,8 @@ pub enum TileTypes {
 #[derive(Clone, Copy)]
 pub enum BlockColor {
     Red,
-    Green,
     Blue,
+    Green,
     Yellow,
 }
 

@@ -12,5 +12,4 @@ fn main() {
     println!("{:?}", game.get_cell(Cordinate::new(4, 7)).unwrap());
     game.draw_raw();
     game.draw_board();
-    game.draw_board();
 }

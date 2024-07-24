@@ -33,6 +33,7 @@ impl GameData {
             width,
         }
     }
+
     const fn in_bounds(&self, location: Cordinate) -> bool {
         location.x < self.width && location.y < self.height
     }
@@ -44,10 +45,12 @@ impl GameData {
             None
         }
     }
+
     pub fn draw_raw(&self) {
         self.game_board.iter().for_each(|x| print!("{x:?}"));
         println!();
     }
+
     pub fn draw_board(&self) {
         println!("╔{}╗", "═".repeat((self.width * 2).into()));
         for current_row in self.game_board.chunks(self.width.into()).rev() {

@@ -2,14 +2,14 @@ use rand::{distributions::Standard, prelude::Distribution};
 use std::fmt::{Debug, Display};
 use termion::color;
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum TileTypes {
     Block(BlockColor),
     _Firework(Direction),
     _DiscoBall,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum BlockColor {
     Red,
     Blue,
@@ -17,7 +17,7 @@ pub enum BlockColor {
     Yellow,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, PartialEq, Eq)]
 pub enum Direction {
     _Vertical,
     _Horizontal,

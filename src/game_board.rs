@@ -34,6 +34,18 @@ impl GameData {
         }
     }
 
+    // Consider passing a function for tile generation to allow for no randomness
+    // This would possibly require adding a function to the struct for generating new cells
+    pub fn preset_new(height: u16, width: u16, board: Vec<TileTypes>) -> Self {
+        Self {
+            game_board: board,
+            _turn_number: 0,
+            _max_turns: 0,
+            height,
+            width,
+        }
+    }
+
     const fn in_bounds(&self, location: Cordinate) -> bool {
         location.x < self.width && location.y < self.height
     }

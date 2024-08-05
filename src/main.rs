@@ -2,6 +2,9 @@ use game_board::{Cordinate, GameData};
 mod game_board;
 mod tiles;
 
+#[cfg(test)]
+mod test;
+
 const HEIGHT: u16 = 8;
 const WIDTH: u16 = 16;
 

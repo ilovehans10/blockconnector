@@ -5,6 +5,10 @@ mod tests {
         tiles::{BlockColor, TileTypes},
     };
 
+    fn blue_board(height: u16, width: u16) -> GameData {
+        GameData::preset_new(height, width, vec![TileTypes::Block(BlockColor::Blue); (height * width).into()])
+    }
+
     #[test]
     fn make_board() {
         GameData::new(8, 8);
@@ -19,9 +23,9 @@ mod tests {
     }
     #[test]
     fn get_cell_check() {
-        let game = GameData::preset_new(4, 4, vec![TileTypes::Block(BlockColor::Blue)]);
+        let game = blue_board(4, 4);
         assert_eq!(
-            game.get_cell(Cordinate::new(0, 0)).unwrap(),
+            game.get_cell(Cordinate::new(2, 2)).unwrap(),
             TileTypes::Block(BlockColor::Blue)
         );
     }

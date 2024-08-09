@@ -36,6 +36,7 @@ impl GameData {
 
     // Consider passing a function for tile generation to allow for no randomness
     // This would possibly require adding a function to the struct for generating new cells
+    #[cfg(test)]
     pub fn preset_new(height: u16, width: u16, board: Vec<TileTypes>) -> Self {
         Self {
             game_board: board,

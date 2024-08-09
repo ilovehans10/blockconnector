@@ -6,7 +6,11 @@ mod tests {
     };
 
     fn blue_board(height: u16, width: u16) -> GameData {
-        GameData::preset_new(height, width, vec![TileTypes::Block(BlockColor::Blue); (height * width).into()])
+        GameData::preset_new(
+            height,
+            width,
+            vec![TileTypes::Block(BlockColor::Blue); (height * width).into()],
+        )
     }
 
     #[test]

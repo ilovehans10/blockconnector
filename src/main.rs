@@ -12,7 +12,8 @@ fn main() {
     let mut game = GameData::new(HEIGHT, WIDTH);
     println!("{:?}", game.get_cell(Cordinate::new(0, 0)).unwrap());
     println!("{:?}", game.get_cell(Cordinate::new(1, 1)).unwrap());
-    game.set_cell(Cordinate::new(4, 7), tiles::TileTypes::Gap).unwrap();
+    game.set_cell(Cordinate::new(4, 7), tiles::TileTypes::Gap)
+        .unwrap();
     game.draw_raw();
     game.draw_board();
 }

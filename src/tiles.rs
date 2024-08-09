@@ -53,15 +53,27 @@ impl Debug for TileTypes {
             Self::_DiscoBall => write!(f, "*"),
             Self::_Firework(_direction) => todo!(),
             Self::Block(color) => match color {
-                BlockColor::Red => write!(f,    "{}[]{}", color::Bg(color::Red), color::Bg(color::Reset)),
-                BlockColor::Blue => write!(f,   "{}[]{}", color::Bg(color::Blue), color::Bg(color::Reset)),
-                BlockColor::Green => write!(f , "{}[]{}", color::Bg(color::Green), color::Bg(color::Reset)),
-                BlockColor::Yellow => write!(f, "{}[]{}", color::Bg(color::Yellow), color::Bg(color::Reset)),
+                BlockColor::Red => {
+                    write!(f, "{}[]{}", color::Bg(color::Red), color::Bg(color::Reset))
+                }
+                BlockColor::Blue => {
+                    write!(f, "{}[]{}", color::Bg(color::Blue), color::Bg(color::Reset))
+                }
+                BlockColor::Green => write!(
+                    f,
+                    "{}[]{}",
+                    color::Bg(color::Green),
+                    color::Bg(color::Reset)
+                ),
+                BlockColor::Yellow => write!(
+                    f,
+                    "{}[]{}",
+                    color::Bg(color::Yellow),
+                    color::Bg(color::Reset)
+                ),
             },
         }
-
     }
-
 }
 
 impl Distribution<BlockColor> for Standard {

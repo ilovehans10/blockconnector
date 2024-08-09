@@ -59,6 +59,15 @@ impl GameData {
         }
     }
 
+    pub fn set_cell(&mut self, location: Cordinate, tile_type: TileTypes) -> Result<(), ()> {
+        if self.in_bounds(location) {
+            self.game_board[usize::from(location.x + (location.y * self.width))] = tile_type;
+            Ok(())
+        } else {
+            Err(())
+        }
+    }
+
     pub fn draw_raw(&self) {
         self.game_board.iter().for_each(|x| print!("{x:?}"));
         println!();

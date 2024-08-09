@@ -29,4 +29,18 @@ mod tests {
             TileTypes::Block(BlockColor::Blue)
         );
     }
+
+    #[test]
+    #[should_panic(expected = "called `Option::unwrap()` on a `None` value")]
+    fn out_of_bounds() {
+        let game = blue_board(4, 4);
+        game.get_cell(Cordinate::new(8, 8)).unwrap();
+    }
+
+    #[test]
+    fn add_gaps() {
+        let mut game = blue_board(8, 8);
+        game.set_cell(Cordinate::new(4, 4), TileTypes::Gap).unwrap();
+        assert_eq!(game.get_cell(Cordinate::new(4, 4)).unwrap(), TileTypes::Gap);
+    }
 }

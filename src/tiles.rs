@@ -5,6 +5,7 @@ use termion::color;
 #[derive(Clone, Copy, PartialEq, Eq)]
 pub enum TileTypes {
     Gap,
+    Empty,
     Block(BlockColor),
     _Firework(Direction),
     _DiscoBall,
@@ -34,6 +35,7 @@ impl Display for TileTypes {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Gap => write!(f, "{}  ", color::Bg(color::Reset)),
+            Self::Empty => write!(f, "{}++", color::Bg(color::Reset)),
             Self::_DiscoBall => write!(f, "*"),
             Self::_Firework(_direction) => todo!(),
             Self::Block(color) => match color {
@@ -50,6 +52,7 @@ impl Debug for TileTypes {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
             Self::Gap => write!(f, "{}  ", color::Bg(color::Reset)),
+            Self::Empty => write!(f, "{}++", color::Bg(color::Reset)),
             Self::_DiscoBall => write!(f, "*"),
             Self::_Firework(_direction) => todo!(),
             Self::Block(color) => match color {

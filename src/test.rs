@@ -35,10 +35,15 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "called `Option::unwrap()` on a `None` value")]
     fn out_of_bounds() {
         let game = blue_board(4, 4);
-        game.get_cell(Cordinate::new(8, 8)).unwrap();
+        assert!(game.get_cell(Cordinate::new(8, 8)).is_err());
+    }
+
+    #[test]
+    fn out_of_bounds_assignment() {
+        let mut game = blue_board(8, 8);
+        assert!(game.set_cell(Cordinate::new(10, 4), TileTypes::Gap).is_err());
     }
 
     #[test]

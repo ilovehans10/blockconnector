@@ -1,10 +1,17 @@
 use crate::tiles::{BlockColor, TileTypes};
 use termion::color;
+use thiserror::Error;
 
 #[derive(Debug, Clone, Copy)]
 pub struct Cordinate {
     x: u16,
     y: u16,
+}
+
+#[derive(Error, Debug)]
+pub enum BoardError {
+    #[error("expected within {limit}, but found {exception}")]
+    BoundsError { limit: u16, exception: u16 },
 }
 
 pub struct GameData {
@@ -47,25 +54,25 @@ impl GameData {
         }
     }
 
-    const fn in_bounds(&self, location: Cordinate) -> bool {
-        location.x < self.width && location.y < self.height
+    const fn in_bounds(&self, location: Cordinate) -> Result<(), BoardError> {
+        if location.x >= self.width {
+            return Err(BoardError::BoundsError { limit: self.width, exception: location.x })
+        }
+        if location.y >= self.height {
+            return Err(BoardError::BoundsError { limit: self.height, exception: location.y })
+        }
+        Ok(())
     }
 
-    pub fn get_cell(&self, location: Cordinate) -> Option<TileTypes> {
-        if self.in_bounds(location) {
-            Some(self.game_board[usize::from(location.x + (location.y * self.width))])
-        } else {
-            None
-        }
+    pub fn get_cell(&self, location: Cordinate) -> Result<TileTypes, BoardError> {
+        self.in_bounds(location)?;
+        Ok(self.game_board[usize::from(location.x + (location.y * self.width))])
     }
 
-    pub fn set_cell(&mut self, location: Cordinate, tile_type: TileTypes) -> Result<(), ()> {
-        if self.in_bounds(location) {
-            self.game_board[usize::from(location.x + (location.y * self.width))] = tile_type;
-            Ok(())
-        } else {
-            Err(())
-        }
+    pub fn set_cell(&mut self, location: Cordinate, tile_type: TileTypes) -> Result<(), BoardError> {
+        self.in_bounds(location)?;
+        self.game_board[usize::from(location.x + (location.y * self.width))] = tile_type;
+        Ok(())
     }
 
     pub fn draw_raw(&self) {

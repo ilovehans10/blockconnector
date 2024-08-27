@@ -99,7 +99,7 @@ impl GameData {
         }
     }
 
-    const fn in_bounds(&self, location: &Cordinate) -> Result<(), BoardError> {
+    const fn in_bounds(&self, location: Cordinate) -> Result<(), BoardError> {
         if location.x >= self.width {
             return Err(BoardError::BoundsError {
                 limit: self.width,
@@ -116,13 +116,13 @@ impl GameData {
     }
 
     pub fn get_cell(&self, location: Cordinate) -> Result<TileTypes, BoardError> {
-        self.in_bounds(&location)?;
+        self.in_bounds(location)?;
         Ok(self.game_board[usize::from(location.x + (location.y * self.width))])
     }
 
     pub fn set_cell(
         &mut self,
-        location: &Cordinate,
+        location: Cordinate,
         tile_type: TileTypes,
     ) -> Result<(), BoardError> {
         self.in_bounds(location)?;
@@ -153,10 +153,10 @@ impl GameData {
         offset: Cordinate,
         tile_type: TileTypes,
     ) -> Result<(), BoardError> {
-        self.in_bounds(&(offset + *shape.locations.last().unwrap()))?;
+        self.in_bounds(offset + *shape.locations.last().unwrap())?;
         for location_item in &shape.locations {
             let location = *location_item + offset;
-            self.set_cell(&location, tile_type)?;
+            self.set_cell(location, tile_type)?;
         }
         Ok(())
     }

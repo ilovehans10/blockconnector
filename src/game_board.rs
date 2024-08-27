@@ -17,7 +17,6 @@ pub enum BoardError {
 
 pub struct Shape {
     locations: Vec<Cordinate>,
-    shape_type: ShapeType,
 }
 
 pub enum ShapeType {
@@ -59,7 +58,7 @@ impl Sub for Cordinate {
 }
 
 impl Shape {
-    pub fn new(shape_type: ShapeType) -> Self {
+    pub fn new(shape_type: &ShapeType) -> Self {
         match shape_type {
             ShapeType::Rectangle(size) => {
                 let mut locations = Vec::<Cordinate>::with_capacity((size.x * size.y).into());
@@ -69,8 +68,7 @@ impl Shape {
                     }
                 }
                 Self {
-                    locations,
-                    shape_type,
+                    locations
                 }
             }
         }

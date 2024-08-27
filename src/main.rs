@@ -10,7 +10,7 @@ const WIDTH: u16 = 16;
 
 fn main() {
     let mut game = GameData::new(HEIGHT, WIDTH);
-    let rectangle = Shape::new(ShapeType::Rectangle(Cordinate::new(8, 4)));
+    let rectangle = Shape::new(&ShapeType::Rectangle(Cordinate::new(8, 4)));
     println!("{:?}", game.get_cell(Cordinate::new(0, 0)).unwrap());
     println!("{:?}", game.get_cell(Cordinate::new(1, 1)).unwrap());
     game.apply_shape(&rectangle, Cordinate::new(4, 2), tiles::TileTypes::Gap)

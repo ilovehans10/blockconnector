@@ -14,6 +14,16 @@ pub enum BoardError {
     BoundsError { limit: u16, exception: u16 },
 }
 
+pub struct Shape {
+    locations: Vec<Cordinate>,
+    shape_type: ShapeType,
+}
+
+pub enum ShapeType {
+    Square(Cordinate, Cordinate),
+    Rectangle(Cordinate, Cordinate),
+}
+
 pub struct GameData {
     game_board: Vec<TileTypes>,
     _turn_number: u8,
@@ -25,6 +35,15 @@ pub struct GameData {
 impl Cordinate {
     pub const fn new(x: u16, y: u16) -> Self {
         Self { x, y }
+    }
+}
+
+impl Shape {
+    fn new(board: Vec<TileTypes>, shape_type: ShapeType) -> Result<Self, BoardError> {
+        match shape_type {
+            ShapeType::Square(corner_first, corner_second) => todo!(),
+            ShapeType::Rectangle(corner_first, corner_second) => todo!(),
+        }
     }
 }
 
@@ -56,10 +75,16 @@ impl GameData {
 
     const fn in_bounds(&self, location: Cordinate) -> Result<(), BoardError> {
         if location.x >= self.width {
-            return Err(BoardError::BoundsError { limit: self.width, exception: location.x })
+            return Err(BoardError::BoundsError {
+                limit: self.width,
+                exception: location.x,
+            });
         }
         if location.y >= self.height {
-            return Err(BoardError::BoundsError { limit: self.height, exception: location.y })
+            return Err(BoardError::BoundsError {
+                limit: self.height,
+                exception: location.y,
+            });
         }
         Ok(())
     }
@@ -69,7 +94,11 @@ impl GameData {
         Ok(self.game_board[usize::from(location.x + (location.y * self.width))])
     }
 
-    pub fn set_cell(&mut self, location: Cordinate, tile_type: TileTypes) -> Result<(), BoardError> {
+    pub fn set_cell(
+        &mut self,
+        location: Cordinate,
+        tile_type: TileTypes,
+    ) -> Result<(), BoardError> {
         self.in_bounds(location)?;
         self.game_board[usize::from(location.x + (location.y * self.width))] = tile_type;
         Ok(())

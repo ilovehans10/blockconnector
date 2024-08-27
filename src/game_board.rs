@@ -1,4 +1,5 @@
 use crate::tiles::{BlockColor, TileTypes};
+use std::ops::{Add, Sub};
 use termion::color;
 use thiserror::Error;
 
@@ -20,8 +21,7 @@ pub struct Shape {
 }
 
 pub enum ShapeType {
-    Square(Cordinate, Cordinate),
-    Rectangle(Cordinate, Cordinate),
+    Rectangle(Cordinate),
 }
 
 pub struct GameData {
@@ -38,11 +38,41 @@ impl Cordinate {
     }
 }
 
+impl Add for Cordinate {
+    type Output = Self;
+    fn add(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+        }
+    }
+}
+
+impl Sub for Cordinate {
+    type Output = Self;
+    fn sub(self, rhs: Self) -> Self::Output {
+        Self {
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+        }
+    }
+}
+
 impl Shape {
-    fn new(board: Vec<TileTypes>, shape_type: ShapeType) -> Result<Self, BoardError> {
+    pub fn new(shape_type: ShapeType) -> Self {
         match shape_type {
-            ShapeType::Square(corner_first, corner_second) => todo!(),
-            ShapeType::Rectangle(corner_first, corner_second) => todo!(),
+            ShapeType::Rectangle(size) => {
+                let mut locations = Vec::<Cordinate>::with_capacity((size.x * size.y).into());
+                for x in 0..size.x {
+                    for y in 0..size.y {
+                        locations.push(Cordinate::new(x, y));
+                    }
+                }
+                Self {
+                    locations,
+                    shape_type,
+                }
+            }
         }
     }
 }
@@ -73,7 +103,7 @@ impl GameData {
         }
     }
 
-    const fn in_bounds(&self, location: Cordinate) -> Result<(), BoardError> {
+    const fn in_bounds(&self, location: &Cordinate) -> Result<(), BoardError> {
         if location.x >= self.width {
             return Err(BoardError::BoundsError {
                 limit: self.width,
@@ -90,13 +120,13 @@ impl GameData {
     }
 
     pub fn get_cell(&self, location: Cordinate) -> Result<TileTypes, BoardError> {
-        self.in_bounds(location)?;
+        self.in_bounds(&location)?;
         Ok(self.game_board[usize::from(location.x + (location.y * self.width))])
     }
 
     pub fn set_cell(
         &mut self,
-        location: Cordinate,
+        location: &Cordinate,
         tile_type: TileTypes,
     ) -> Result<(), BoardError> {
         self.in_bounds(location)?;
@@ -119,5 +149,19 @@ impl GameData {
             println!("{}║", color::Bg(color::Reset));
         }
         println!("╚{}╝", "═".repeat((self.width * 2).into()));
+    }
+
+    pub fn apply_shape(
+        &mut self,
+        shape: &Shape,
+        offset: Cordinate,
+        tile_type: TileTypes,
+    ) -> Result<(), BoardError> {
+        self.in_bounds(&(offset + *shape.locations.last().unwrap()))?;
+        for location_item in &shape.locations {
+            let location = *location_item + offset;
+            self.set_cell(&location, tile_type)?;
+        }
+        Ok(())
     }
 }

@@ -44,7 +44,7 @@ mod tests {
     fn out_of_bounds_assignment() {
         let mut game = blue_board(8, 8);
         assert_eq!(
-            game.set_cell(Cordinate::new(10, 4), TileTypes::Gap)
+            game.set_cell(&Cordinate::new(10, 4), TileTypes::Gap)
                 .err()
                 .unwrap(),
             BoardError::BoundsError {
@@ -57,7 +57,7 @@ mod tests {
     #[test]
     fn add_gaps() {
         let mut game = blue_board(8, 8);
-        game.set_cell(Cordinate::new(4, 4), TileTypes::Gap).unwrap();
+        game.set_cell(&Cordinate::new(4, 4), TileTypes::Gap).unwrap();
         assert_eq!(game.get_cell(Cordinate::new(4, 4)).unwrap(), TileTypes::Gap);
     }
 }

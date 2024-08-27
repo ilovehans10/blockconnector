@@ -57,7 +57,8 @@ mod tests {
     #[test]
     fn add_gaps() {
         let mut game = blue_board(8, 8);
-        game.set_cell(&Cordinate::new(4, 4), TileTypes::Gap).unwrap();
+        game.set_cell(&Cordinate::new(4, 4), TileTypes::Gap)
+            .unwrap();
         assert_eq!(game.get_cell(Cordinate::new(4, 4)).unwrap(), TileTypes::Gap);
     }
 }

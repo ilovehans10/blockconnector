@@ -67,9 +67,7 @@ impl Shape {
                         locations.push(Cordinate::new(x, y));
                     }
                 }
-                Self {
-                    locations
-                }
+                Self { locations }
             }
         }
     }

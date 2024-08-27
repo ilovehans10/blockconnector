@@ -8,7 +8,7 @@ pub struct Cordinate {
     y: u16,
 }
 
-#[derive(Error, Debug)]
+#[derive(Error, Debug, PartialEq, Eq)]
 pub enum BoardError {
     #[error("expected within {limit}, but found {exception}")]
     BoundsError { limit: u16, exception: u16 },

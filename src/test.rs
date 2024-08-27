@@ -1,7 +1,7 @@
 #[cfg(test)]
 mod tests {
     use crate::{
-        game_board::{Cordinate, GameData},
+        game_board::{BoardError, Cordinate, GameData},
         tiles::{BlockColor, TileTypes},
     };
 
@@ -43,7 +43,15 @@ mod tests {
     #[test]
     fn out_of_bounds_assignment() {
         let mut game = blue_board(8, 8);
-        assert!(game.set_cell(Cordinate::new(10, 4), TileTypes::Gap).is_err());
+        assert_eq!(
+            game.set_cell(Cordinate::new(10, 4), TileTypes::Gap)
+                .err()
+                .unwrap(),
+            BoardError::BoundsError {
+                limit: 8,
+                exception: 10
+            }
+        );
     }
 
     #[test]

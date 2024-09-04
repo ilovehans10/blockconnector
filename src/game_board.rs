@@ -135,6 +135,28 @@ impl GameData {
         println!();
     }
 
+    pub fn draw_info(&self) {
+        self.game_board
+            .chunks(self.width.into())
+            .rev()
+            .enumerate()
+            .for_each(|(index, tile_chunk)| {
+                let rev_index = usize::from(self.height - 1) - index;
+                print!("{rev_index:2}");
+                for tile in tile_chunk {
+                    print!("{tile:?} ");
+                }
+                if index < (usize::from(self.height) - 1) {
+                    println!("\n");
+                } else {
+                    println!();
+                };
+            });
+        print!(" ");
+        (0..self.width).for_each(|index| print!("{index:3?}"));
+        println!();
+    }
+
     pub fn draw_board(&self) {
         println!("╔{}╗", "═".repeat((self.width * 2).into()));
         for current_row in self.game_board.chunks(self.width.into()).rev() {

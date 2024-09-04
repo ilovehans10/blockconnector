@@ -20,5 +20,6 @@ fn main() {
     game.set_cell(Cordinate::new(4, 7), tiles::TileTypes::Gap)
         .unwrap();
     game.draw_raw();
+    game.draw_info();
     game.draw_board();
 }

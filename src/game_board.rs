@@ -89,11 +89,10 @@ impl Shape {
     pub fn new(shape_type: &ShapeType) -> Self {
         match shape_type {
             ShapeType::Rectangle(size) => {
-                let mut locations = Vec::<Cordinate>::with_capacity((size.x * size.y).into());
-                for x in 0..size.x {
-                    for y in 0..size.y {
-                        locations.push(Cordinate::new(x, y));
-                    }
+                let volume = usize::from(size.x * size.y);
+                let mut locations = Vec::<Cordinate>::with_capacity(volume);
+                for (x, y) in (0..size.x).cartesian_product(0..size.y) {
+                    locations.push(Cordinate::new(x, y));
                 }
                 Self { locations }
             }

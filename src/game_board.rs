@@ -54,12 +54,11 @@ impl Cordinate {
         Some(Self { x, y })
     }
 
-    pub fn adjacent(&self) -> Vec<Option<Cordinate>> {
+    pub fn adjacent(&self) -> Vec<Option<Self>> {
         let mut adjacent_cords = Vec::with_capacity(4);
-        for rhs_x in [-1, 1] {
-            for rhs_y in [-1, 1] {
-                adjacent_cords.push(self.checked_add_signed(rhs_x, rhs_y));
-            }
+        for (rhs_1, rhs_2) in std::iter::once(0).cartesian_product([-1, 1]) {
+            adjacent_cords.push(self.checked_add_signed(rhs_1, rhs_2));
+            adjacent_cords.push(self.checked_add_signed(rhs_2, rhs_1));
         }
         adjacent_cords
     }
@@ -159,8 +158,19 @@ impl GameData {
         self.in_bounds(location)?;
         let location_index = usize::from(location.x + (location.y * self.width));
         self.adjacent_cache[location_index] = None;
+        for adjacent_location in location.adjacent().into_iter().flatten() {
+            if self.in_bounds(adjacent_location).is_ok() {
+                self.adjacent_cache[usize::from(adjacent_location.x + (adjacent_location.y * self.width))] = None;
+            }
+        }
         self.game_board[location_index] = tile_type;
+        self.update_adjacent_cache()?;
         Ok(())
+    }
+
+    fn get_adjacency_status(&self, location: Cordinate) -> Result<Option<AdjacentData>, BoardError> {
+        self.in_bounds(location)?;
+        Ok(self.adjacent_cache[usize::from(location.x + (location.y * self.width))])
     }
 
     fn all_cords(&self) -> Vec<Cordinate> {
@@ -176,8 +186,30 @@ impl GameData {
         self.adjacent_cache.iter().any(|&x| x.is_none())
     }
 
-    fn update_adjacent_cache(&mut self) {
-        todo!("Make adjacent cache update function");
+    fn reset_adjacent_cache(&mut self) {
+        self.adjacent_cache.fill(None);
+    }
+
+    fn update_adjacent_cache(&mut self) -> Result<(), BoardError> {
+        for (index, top_cordinates) in self.all_cords().into_iter().enumerate() {
+            if self.get_adjacency_status(top_cordinates).unwrap().is_some() {continue;}
+
+            let (mut up,mut down,mut left,mut right) = (Some(false), Some(false), Some(false), Some(false));
+            for (direction, adjacent_cordinates) in top_cordinates.adjacent().into_iter().enumerate() {
+                if adjacent_cordinates.is_none() {continue;}
+                if self.in_bounds(adjacent_cordinates.unwrap()).is_err() {continue;}
+                if self.get_cell(top_cordinates)? != self.get_cell(adjacent_cordinates.unwrap())? {continue;}
+                match direction {
+                    0 => {up = Some(true)},
+                    1 => {down = Some(true)},
+                    2 => {left = Some(true)},
+                    3 => {right = Some(true)},
+                    _ => panic!(),
+                }
+            }
+            self.adjacent_cache[index] = Some(AdjacentData {up, down, left, right});
+        }
+        Ok(())
     }
 
     pub fn draw_raw(&self) {

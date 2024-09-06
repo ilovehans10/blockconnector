@@ -1,5 +1,6 @@
 use crate::tiles::{BlockColor, TileTypes};
 use std::ops::{Add, Sub};
+use itertools::Itertools;
 use termion::color;
 use thiserror::Error;
 
@@ -23,8 +24,19 @@ pub enum ShapeType {
     Rectangle(Cordinate),
 }
 
+#[derive(Clone, Copy)]
+struct AdjacentData {
+    up: Option<bool>,
+    down: Option<bool>,
+    left: Option<bool>,
+    right: Option<bool>,
+}
+
+// in this case adjacent doesn't include diagnols and in other words is in reference to cells with
+// a manhatan distance of one
 pub struct GameData {
     game_board: Vec<TileTypes>,
+    adjacent_cache: Vec<Option<AdjacentData>>,
     _turn_number: u8,
     _max_turns: u8,
     height: u16,
@@ -34,6 +46,22 @@ pub struct GameData {
 impl Cordinate {
     pub const fn new(x: u16, y: u16) -> Self {
         Self { x, y }
+    }
+
+    fn checked_add_signed(&self, rhs_x: i16, rhs_y: i16) -> Option<Self> {
+        let x = self.x.checked_add_signed(rhs_x)?;
+        let y = self.y.checked_add_signed(rhs_y)?;
+        Some(Self { x, y })
+    }
+
+    pub fn adjacent(&self) -> Vec<Option<Cordinate>> {
+        let mut adjacent_cords = Vec::with_capacity(4);
+        for rhs_x in [-1, 1] {
+            for rhs_y in [-1, 1] {
+                adjacent_cords.push(self.checked_add_signed(rhs_x, rhs_y));
+            }
+        }
+        adjacent_cords
     }
 }
 
@@ -75,10 +103,12 @@ impl Shape {
 
 impl GameData {
     pub fn new(height: u16, width: u16) -> Self {
-        let mut prototype_board = vec![TileTypes::new(); (height * width).into()];
+        let size = usize::from(height * width);
+        let mut prototype_board = vec![TileTypes::new(); size];
         prototype_board.fill_with(|| TileTypes::Block(rand::random::<BlockColor>()));
         Self {
             game_board: prototype_board,
+            adjacent_cache: vec![None; size],
             _turn_number: 0,
             _max_turns: 0,
             height,
@@ -90,8 +120,10 @@ impl GameData {
     // This would possibly require adding a function to the struct for generating new cells
     #[cfg(test)]
     pub fn preset_new(height: u16, width: u16, board: Vec<TileTypes>) -> Self {
+        let size = usize::from(height * width);
         Self {
             game_board: board,
+            adjacent_cache: vec![None; size],
             _turn_number: 0,
             _max_turns: 0,
             height,
@@ -126,8 +158,27 @@ impl GameData {
         tile_type: TileTypes,
     ) -> Result<(), BoardError> {
         self.in_bounds(location)?;
-        self.game_board[usize::from(location.x + (location.y * self.width))] = tile_type;
+        let location_index = usize::from(location.x + (location.y * self.width));
+        self.adjacent_cache[location_index] = None;
+        self.game_board[location_index] = tile_type;
         Ok(())
+    }
+
+    fn all_cords(&self) -> Vec<Cordinate> {
+        let length = usize::from(self.height * self.width);
+        let mut all_cordinate_vector = Vec::with_capacity(length);
+        for (height, width) in (0..self.height).cartesian_product(0..self.width) {
+            all_cordinate_vector.push(Cordinate::new(height, width));
+        }
+        all_cordinate_vector
+    }
+
+    fn check_adjacent_cache(&self) -> bool {
+        self.adjacent_cache.iter().any(|&x| x.is_none())
+    }
+
+    fn update_adjacent_cache(&mut self) {
+        todo!("Make adjacent cache update function");
     }
 
     pub fn draw_raw(&self) {

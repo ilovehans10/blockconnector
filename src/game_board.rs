@@ -167,8 +167,8 @@ impl GameData {
     fn all_cords(&self) -> Vec<Cordinate> {
         let length = usize::from(self.height * self.width);
         let mut all_cordinate_vector = Vec::with_capacity(length);
-        for (height, width) in (0..self.height).cartesian_product(0..self.width) {
-            all_cordinate_vector.push(Cordinate::new(height, width));
+        for (y, x) in (0..self.height).cartesian_product(0..self.width) {
+            all_cordinate_vector.push(Cordinate::new(x, y));
         }
         all_cordinate_vector
     }

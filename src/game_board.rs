@@ -1,6 +1,6 @@
 use crate::tiles::{BlockColor, TileTypes};
-use std::ops::{Add, Sub};
 use itertools::Itertools;
+use std::ops::{Add, Sub};
 use termion::color;
 use thiserror::Error;
 

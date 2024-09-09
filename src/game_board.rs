@@ -241,14 +241,26 @@ impl GameData {
 
     pub fn draw_info(&self) {
         self.game_board
+            .iter()
+            .zip(self.adjacent_cache.iter())
+            .collect::<Vec<_>>()
             .chunks(self.width.into())
             .rev()
             .enumerate()
-            .for_each(|(index, tile_chunk)| {
+            .for_each(|(index, cell_data_chunk)| {
                 let rev_index = usize::from(self.height - 1) - index;
                 print!("{rev_index:2}");
-                for tile in tile_chunk {
-                    print!("{tile:?} ");
+                for (tile, adjacency) in cell_data_chunk {
+                    let (left_string, right_string) = match adjacency {
+                        Some(AdjacentData {
+                            up: _,
+                            down: _,
+                            left,
+                            right,
+                        }) => (String::new(), String::new()),
+                        None => (String::from("X"), String::from("X")),
+                    };
+                    print!("{left_string}{tile:?}{right_string}");
                 }
                 if index < (usize::from(self.height) - 1) {
                     println!("\n");

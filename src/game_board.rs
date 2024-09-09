@@ -56,7 +56,7 @@ impl Cordinate {
 
     pub fn adjacent(&self) -> Vec<Option<Self>> {
         let mut adjacent_cords = Vec::with_capacity(4);
-        for (rhs_1, rhs_2) in std::iter::once(0).cartesian_product([-1, 1]) {
+        for (rhs_1, rhs_2) in std::iter::once(0).cartesian_product([1, -1]) {
             adjacent_cords.push(self.checked_add_signed(rhs_1, rhs_2));
             adjacent_cords.push(self.checked_add_signed(rhs_2, rhs_1));
         }
@@ -217,10 +217,10 @@ impl GameData {
                     continue;
                 }
                 match direction {
-                    0 => down = Some(true),
-                    1 => left = Some(true),
-                    2 => up = Some(true),
-                    3 => right = Some(true),
+                    0 => up = Some(true),
+                    1 => right = Some(true),
+                    2 => down = Some(true),
+                    3 => left = Some(true),
                     _ => panic!("There should only be 4 adjacency values, but a 5th was found"),
                 }
             }

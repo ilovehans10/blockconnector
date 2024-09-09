@@ -217,9 +217,9 @@ impl GameData {
                     continue;
                 }
                 match direction {
-                    0 => up = Some(true),
-                    1 => down = Some(true),
-                    2 => left = Some(true),
+                    0 => down = Some(true),
+                    1 => left = Some(true),
+                    2 => up = Some(true),
                     3 => right = Some(true),
                     _ => panic!("There should only be 4 adjacency values, but a 5th was found"),
                 }
@@ -257,7 +257,18 @@ impl GameData {
                             down: _,
                             left,
                             right,
-                        }) => (String::new(), String::new()),
+                        }) => { match (left, right) {
+                            (None, None) => (String::from("|"), String::from("|")),
+                            (None, Some(true)) => (String::from("|"), String::from(">")),
+                            (None, Some(false)) => (String::from("|"), String::from("<")),
+                            (Some(true), None) => (String::from("<"), String::from("|")),
+                            (Some(false), None) => (String::from(">"), String::from("|")),
+                            (Some(true), Some(true)) => (String::from("<"), String::from(">")),
+                            (Some(false), Some(true)) => (String::from(">"), String::from(">")),
+                            (Some(true), Some(false)) => (String::from("<"), String::from("<")),
+                            (Some(false), Some(false)) => (String::from(">"), String::from("<")),
+                        }
+                        },
                         None => (String::from("X"), String::from("X")),
                     };
                     print!("{left_string}{tile:?}{right_string}");

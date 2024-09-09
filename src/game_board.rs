@@ -145,9 +145,13 @@ impl GameData {
         Ok(())
     }
 
-    pub fn get_cell(&self, location: Cordinate) -> Result<TileTypes, BoardError> {
+    fn cordinates_to_index(&self, location: Cordinate) -> Result<usize, BoardError> {
         self.in_bounds(location)?;
-        Ok(self.game_board[usize::from(location.x + (location.y * self.width))])
+        Ok(usize::from(location.x + (location.y * self.width)))
+    }
+
+    pub fn get_cell(&self, location: Cordinate) -> Result<TileTypes, BoardError> {
+        Ok(self.game_board[self.cordinates_to_index(location)?])
     }
 
     pub fn set_cell(
@@ -155,12 +159,12 @@ impl GameData {
         location: Cordinate,
         tile_type: TileTypes,
     ) -> Result<(), BoardError> {
-        self.in_bounds(location)?;
-        let location_index = usize::from(location.x + (location.y * self.width));
+        let location_index = self.cordinates_to_index(location)?;
         self.adjacent_cache[location_index] = None;
         for adjacent_location in location.adjacent().into_iter().flatten() {
             if self.in_bounds(adjacent_location).is_ok() {
-                self.adjacent_cache[usize::from(adjacent_location.x + (adjacent_location.y * self.width))] = None;
+                let adjacent_location_index = self.cordinates_to_index(adjacent_location)?;
+                self.adjacent_cache[adjacent_location_index] = None;
             }
         }
         self.game_board[location_index] = tile_type;
@@ -168,9 +172,11 @@ impl GameData {
         Ok(())
     }
 
-    fn get_adjacency_status(&self, location: Cordinate) -> Result<Option<AdjacentData>, BoardError> {
-        self.in_bounds(location)?;
-        Ok(self.adjacent_cache[usize::from(location.x + (location.y * self.width))])
+    fn get_adjacency_status(
+        &self,
+        location: Cordinate,
+    ) -> Result<Option<AdjacentData>, BoardError> {
+        Ok(self.adjacent_cache[self.cordinates_to_index(location)?])
     }
 
     fn all_cords(&self) -> Vec<Cordinate> {
@@ -192,22 +198,38 @@ impl GameData {
 
     fn update_adjacent_cache(&mut self) -> Result<(), BoardError> {
         for (index, top_cordinates) in self.all_cords().into_iter().enumerate() {
-            if self.get_adjacency_status(top_cordinates).unwrap().is_some() {continue;}
+            if self.get_adjacency_status(top_cordinates).unwrap().is_some() {
+                continue;
+            }
 
-            let (mut up,mut down,mut left,mut right) = (Some(false), Some(false), Some(false), Some(false));
-            for (direction, adjacent_cordinates) in top_cordinates.adjacent().into_iter().enumerate() {
-                if adjacent_cordinates.is_none() {continue;}
-                if self.in_bounds(adjacent_cordinates.unwrap()).is_err() {continue;}
-                if self.get_cell(top_cordinates)? != self.get_cell(adjacent_cordinates.unwrap())? {continue;}
+            let (mut up, mut down, mut left, mut right) =
+                (Some(false), Some(false), Some(false), Some(false));
+            for (direction, adjacent_cordinates) in
+                top_cordinates.adjacent().into_iter().enumerate()
+            {
+                let Some(real_adjacent_cords) = adjacent_cordinates else {
+                    continue;
+                };
+                if self.in_bounds(real_adjacent_cords).is_err() {
+                    continue;
+                }
+                if self.get_cell(top_cordinates)? != self.get_cell(real_adjacent_cords)? {
+                    continue;
+                }
                 match direction {
-                    0 => {up = Some(true)},
-                    1 => {down = Some(true)},
-                    2 => {left = Some(true)},
-                    3 => {right = Some(true)},
+                    0 => up = Some(true),
+                    1 => down = Some(true),
+                    2 => left = Some(true),
+                    3 => right = Some(true),
                     _ => panic!(),
                 }
             }
-            self.adjacent_cache[index] = Some(AdjacentData {up, down, left, right});
+            self.adjacent_cache[index] = Some(AdjacentData {
+                up,
+                down,
+                left,
+                right,
+            });
         }
         Ok(())
     }

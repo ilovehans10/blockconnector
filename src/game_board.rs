@@ -221,7 +221,7 @@ impl GameData {
                     1 => down = Some(true),
                     2 => left = Some(true),
                     3 => right = Some(true),
-                    _ => panic!(),
+                    _ => panic!("There should only be 4 adjacency values, but a 5th was found"),
                 }
             }
             self.adjacent_cache[index] = Some(AdjacentData {

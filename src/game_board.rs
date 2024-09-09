@@ -257,30 +257,56 @@ impl GameData {
                             down: _,
                             left,
                             right,
-                        }) => { match (left, right) {
+                        }) => match (left, right) {
                             (None, None) => (String::from("|"), String::from("|")),
-                            (None, Some(true)) => (String::from("|"), String::from(">")),
-                            (None, Some(false)) => (String::from("|"), String::from("<")),
-                            (Some(true), None) => (String::from("<"), String::from("|")),
-                            (Some(false), None) => (String::from(">"), String::from("|")),
-                            (Some(true), Some(true)) => (String::from("<"), String::from(">")),
-                            (Some(false), Some(true)) => (String::from(">"), String::from(">")),
-                            (Some(true), Some(false)) => (String::from("<"), String::from("<")),
-                            (Some(false), Some(false)) => (String::from(">"), String::from("<")),
-                        }
+                            (None, Some(true)) => (String::from("|"), String::from("=")),
+                            (None, Some(false)) => (String::from("|"), String::from(":")),
+                            (Some(true), None) => (String::from("="), String::from("|")),
+                            (Some(false), None) => (String::from(":"), String::from("|")),
+                            (Some(true), Some(true)) => (String::from("="), String::from("=")),
+                            (Some(false), Some(true)) => (String::from(":"), String::from("=")),
+                            (Some(true), Some(false)) => (String::from("="), String::from(":")),
+                            (Some(false), Some(false)) => (String::from(":"), String::from(":")),
                         },
                         None => (String::from("X"), String::from("X")),
                     };
                     print!("{left_string}{tile:?}{right_string}");
                 }
+                println!();
                 if index < (usize::from(self.height) - 1) {
-                    println!("\n");
-                } else {
+                    print!("{index} ");
+                    for column in 0..self.width {
+                        let upper_cell_index = (rev_index*usize::from(self.width)) + usize::from(column);
+                        let lower_cell_index = upper_cell_index - usize::from(self.width);
+                        let upper_cell_adjacency = match self.adjacent_cache.get(upper_cell_index).unwrap() {
+                            Some(AdjacentData { up: _, down: x, left: _, right: _ }) => {
+                                match x {
+                                    Some(true) => String::from("|"),
+                                    Some(false) => String::from(":"),
+                                    None => panic!("There should be no none values inbetween rows"),
+                                }
+                            },
+                            None => String::from("X"),
+                        };
+                        let lower_cell_adjacency = match self.adjacent_cache.get(lower_cell_index).unwrap() {
+                            Some(AdjacentData { up: x, down: _, left: _, right: _ }) => {
+                                match x {
+                                    Some(true) => String::from("|"),
+                                    Some(false) => String::from(":"),
+                                    None => panic!("There should be no none values inbetween rows"),
+                                }
+                            },
+                            None => String::from("X"),
+                        };
+                        print!(" ");
+                        print!("{upper_cell_adjacency}{lower_cell_adjacency}");
+                        print!(" ");
+                    }
                     println!();
                 };
             });
         print!(" ");
-        (0..self.width).for_each(|index| print!("{index:3?}"));
+        (0..self.width).for_each(|index| print!("{index:4?}"));
         println!();
     }
 

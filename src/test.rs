@@ -60,4 +60,12 @@ mod tests {
         game.set_cell(Cordinate::new(4, 4), TileTypes::Gap).unwrap();
         assert_eq!(game.get_cell(Cordinate::new(4, 4)).unwrap(), TileTypes::Gap);
     }
+
+    #[test]
+    fn adjacency_cache_generation() {
+        let mut game = blue_board(8, 8);
+        assert!(game.adjacent_cache_is_dirty());
+        game.set_cell(Cordinate::new(0, 0), TileTypes::Gap).unwrap();
+        assert!(!game.adjacent_cache_is_dirty());
+    }
 }

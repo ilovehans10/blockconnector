@@ -182,7 +182,7 @@ impl GameData {
         all_cordinate_vector
     }
 
-    fn adjacent_cache_is_dirty(&self) -> bool {
+    pub fn adjacent_cache_is_dirty(&self) -> bool {
         self.adjacent_cache.iter().any(|&x| x.is_none())
     }
 

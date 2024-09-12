@@ -37,8 +37,6 @@ struct AdjacentData {
 pub struct GameData {
     game_board: Vec<TileTypes>,
     adjacent_cache: Vec<Option<AdjacentData>>,
-    _turn_number: u8,
-    _max_turns: u8,
     height: u16,
     width: u16,
 }
@@ -107,8 +105,6 @@ impl GameData {
         Self {
             game_board: prototype_board,
             adjacent_cache: vec![None; size],
-            _turn_number: 0,
-            _max_turns: 0,
             height,
             width,
         }
@@ -122,8 +118,6 @@ impl GameData {
         Self {
             game_board: board,
             adjacent_cache: vec![None; size],
-            _turn_number: 0,
-            _max_turns: 0,
             height,
             width,
         }

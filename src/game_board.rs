@@ -46,13 +46,13 @@ impl Cordinate {
         Self { x, y }
     }
 
-    fn checked_add_signed(&self, rhs_x: i16, rhs_y: i16) -> Option<Self> {
+    fn checked_add_signed(self, rhs_x: i16, rhs_y: i16) -> Option<Self> {
         let x = self.x.checked_add_signed(rhs_x)?;
         let y = self.y.checked_add_signed(rhs_y)?;
         Some(Self { x, y })
     }
 
-    pub fn adjacent(&self) -> Vec<Option<Self>> {
+    pub fn adjacent(self) -> Vec<Option<Self>> {
         let mut adjacent_cords = Vec::with_capacity(4);
         for (rhs_1, rhs_2) in std::iter::once(0).cartesian_product([1, -1]) {
             adjacent_cords.push(self.checked_add_signed(rhs_1, rhs_2));

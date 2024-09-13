@@ -270,28 +270,37 @@ impl GameData {
                 if index < (usize::from(self.height) - 1) {
                     print!("{index} ");
                     for column in 0..self.width {
-                        let upper_cell_index = (rev_index*usize::from(self.width)) + usize::from(column);
+                        let upper_cell_index =
+                            (rev_index * usize::from(self.width)) + usize::from(column);
                         let lower_cell_index = upper_cell_index - usize::from(self.width);
-                        let upper_cell_adjacency = match self.adjacent_cache.get(upper_cell_index).unwrap() {
-                            Some(AdjacentData { up: _, down: x, left: _, right: _ }) => {
-                                match x {
+                        let upper_cell_adjacency =
+                            match self.adjacent_cache.get(upper_cell_index).unwrap() {
+                                Some(AdjacentData {
+                                    up: _,
+                                    down: x,
+                                    left: _,
+                                    right: _,
+                                }) => match x {
                                     Some(true) => String::from("|"),
                                     Some(false) => String::from(":"),
                                     None => panic!("There should be no none values inbetween rows"),
-                                }
-                            },
-                            None => String::from("X"),
-                        };
-                        let lower_cell_adjacency = match self.adjacent_cache.get(lower_cell_index).unwrap() {
-                            Some(AdjacentData { up: x, down: _, left: _, right: _ }) => {
-                                match x {
+                                },
+                                None => String::from("X"),
+                            };
+                        let lower_cell_adjacency =
+                            match self.adjacent_cache.get(lower_cell_index).unwrap() {
+                                Some(AdjacentData {
+                                    up: x,
+                                    down: _,
+                                    left: _,
+                                    right: _,
+                                }) => match x {
                                     Some(true) => String::from("|"),
                                     Some(false) => String::from(":"),
                                     None => panic!("There should be no none values inbetween rows"),
-                                }
-                            },
-                            None => String::from("X"),
-                        };
+                                },
+                                None => String::from("X"),
+                            };
                         print!(" ");
                         print!("{upper_cell_adjacency}{lower_cell_adjacency}");
                         print!(" ");

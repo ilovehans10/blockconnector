@@ -187,10 +187,6 @@ impl GameData {
         self.adjacent_cache.iter().any(|&x| x.is_none())
     }
 
-    fn reset_adjacent_cache(&mut self) {
-        self.adjacent_cache.fill(None);
-    }
-
     fn update_adjacent_cache(&mut self) -> Result<(), BoardError> {
         for (index, top_cordinates) in self.all_cords().into_iter().enumerate() {
             if self.get_adjacency_status(top_cordinates).unwrap().is_some() {
@@ -227,11 +223,6 @@ impl GameData {
             });
         }
         Ok(())
-    }
-
-    pub fn draw_raw(&self) {
-        self.game_board.iter().for_each(|x| print!("{x:?}"));
-        println!();
     }
 
     pub fn draw_info(&self) {

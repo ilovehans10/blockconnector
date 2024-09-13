@@ -1,9 +1,12 @@
 use crate::{
     game_board::{Cordinate, GameData, Shape, ShapeType},
+    player_input::Inputter,
     tiles,
 };
 
 pub fn game_loop(height: u16, width: u16) {
+    let input_interface = Inputter::new();
+    input_interface.print_history();
     let mut game = GameData::new(height, width);
     let rectangle = Shape::new(&ShapeType::Rectangle(Cordinate::new(8, 4)));
     game.draw_info();

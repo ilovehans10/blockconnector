@@ -1,6 +1,7 @@
 use game_loop::game_loop;
 mod game_board;
 mod game_loop;
+mod player_input;
 mod tiles;
 
 #[cfg(test)]

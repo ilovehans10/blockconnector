@@ -14,7 +14,10 @@ struct InputData {
     status: Status,
 }
 
-struct Status;
+enum Status {
+    Info,
+    Error,
+}
 
 impl Inputter {
     pub const fn new() -> Self {
@@ -25,10 +28,10 @@ impl Inputter {
     }
 
     fn add_history(&mut self, user_input: String, program_output: String) {
-        self.history.push(Input_Data {
+        self.history.push(InputData {
             user_input,
             program_output,
-            status: Status,
+            status: Status::Info,
         });
     }
 

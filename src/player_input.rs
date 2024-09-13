@@ -1,3 +1,5 @@
+use std::io::{self, Write};
+
 pub struct Inputter {
     board_prototype: Option<BoardPrototype>,
     history: Vec<InputData>,
@@ -27,6 +29,20 @@ impl Inputter {
         }
     }
 
+    pub fn get_input(&mut self) {
+        print!(">");
+        io::stdout()
+            .flush()
+            .expect("Should be able to flush stdout");
+        let mut user_input = String::new();
+        let stdin = io::stdin();
+        stdin
+            .read_line(&mut user_input)
+            .expect("Should be able to read from stdin");
+        user_input = user_input.trim().into();
+        self.add_history(user_input, String::from("Output"));
+    }
+
     fn add_history(&mut self, user_input: String, program_output: String) {
         self.history.push(InputData {
             user_input,
@@ -37,7 +53,7 @@ impl Inputter {
 
     pub fn print_history(&self) {
         for item in &self.history {
-            println!(">{}\n{}", item.user_input, item.program_output);
+            println!(">{}\n<{}", item.user_input, item.program_output);
         }
     }
 }

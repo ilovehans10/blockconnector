@@ -5,7 +5,8 @@ use crate::{
 };
 
 pub fn game_loop(height: u16, width: u16) {
-    let input_interface = Inputter::new();
+    let mut input_interface = Inputter::new();
+    input_interface.get_input();
     input_interface.print_history();
     let mut game = GameData::new(height, width);
     let rectangle = Shape::new(&ShapeType::Rectangle(Cordinate::new(8, 4)));

@@ -1,6 +1,6 @@
 pub struct Inputter {
     board_prototype: Option<BoardPrototype>,
-    history: Vec<Input_Data>,
+    history: Vec<InputData>,
 }
 
 struct BoardPrototype {
@@ -8,7 +8,7 @@ struct BoardPrototype {
     width: u16,
 }
 
-struct Input_Data {
+struct InputData {
     user_input: String,
     program_output: String,
     status: Status,
